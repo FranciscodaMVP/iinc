@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %} Orders Reports {% endblock %}
+{% block content %}
+<div class="card-box">
+
+  <!--table class="table table-colored-bordered table-bordered-inverse"-->
+  <!--table class="table table-colored-full table-full-inverse table-hover"-->
+  <table class="table table-colored-full table-full-custom table-hover">
+
+
+        <thead>
+          <th> Order # </th>
+          <th> Delivered </th>
+          <th> Received </th>
+          <th> Line Chief </th>
+          <th> Date </th>
+          <th> Hour </th>
+          <th> Pieces </th>
+          <th> Status </th>
+          <th> Finished Products </th>
+
+        </thead>
+        {% for item in object_list %}
+        <tr>
+            <td> {{item.pk}}</td>
+            <td> {{item.or_delivery}}</td>
+            <td> {{item.or_receive}}</td>
+            <td> {{item.or_lineCh}}</td>
+            <td> {{item.or_date}}</td>
+            <td> {{item.or_time}}</td>
+            <td> {{item.or_pieces}}</td>
+            <td> {{item.get_or_status_display}}</td>
+            <td> {{item.or_finished}}</td>
+
+        </tr>
+      {% endfor %}
+</table>
+
+</div>
+{% endblock %}

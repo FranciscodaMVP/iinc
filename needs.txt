@@ -1,0 +1,20 @@
+HORIZONTAL MATERIAL
+
+ICONOS
+-time
+
+jefes de linea
+
+jefes de calidad ()
+  -ok-sign (ok?)
+  -ban-circle (remove?)
+
+empleados del ssitema de produccion (realizar ordenes)
+  -edit
+
+gerente general (reportes)
+iconos
+  glyphicon
+    -book
+    -User
+    -file
