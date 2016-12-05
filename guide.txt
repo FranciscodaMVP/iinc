@@ -1,0 +1,63 @@
+GENERAL
+  CHECADOR
+
+LOS JEFES DE LINEA
+
+8 Lineas de produccion (automotriz) 450 productos terminados cada 24 HRS
+  requiere de 7 piezas por producto
+  3 jefes de linea por linea (maximo 3 ordenes abiertas por jefe de linea)
+  hasta que las cierre el jefe de calidad
+    registrar el numero de productos terminados y no terminados por desperfectos
+
+8 Lineas de produccion (micro tecnologia) 310 productos terminados cada 24 HRS
+  16 piezas por producto
+  3 jefes de linea por linea (maximo 3 ordenes abiertas por jefe de linea)
+  hasta que las cierre el jefe de calidad
+    registrar el numero de productos terminados y no terminados por desperfectos
+
+  reporte para los jefes de linea
+    piezas solicitads en almacen
+    productos terminados al final del turno
+    estuts de pendiente o aprobado
+    emitido por el departamento de calidad (use JSON)
+
+LOS JEFES DE CALIDAD
+  modulo para realizar los balances de piezas y productos
+  aprobar o desaprobar productos terminados
+  vista para cerrar ordenes de los jefes de linea, empatarlas con los productos
+  terminados entregados por cada jefe.
+
+  deben conocer al final de turno que jefes de linea entregaron productos terminados
+  y cuantos productos entregaron, asi tambien deben saber si los productos fueron
+  aprobados (USE JSON)
+
+Proceso
+  produccion se dirige al almacen a solicitar el numero de piezas
+
+  almacen relaciona las piezas (orden)
+    nombre de quien entrega las piezas
+    quien recibe las piezas
+    nombre de jefe de linea
+    datos de las piezas
+    numero de orden
+    fecha y hora actual
+
+  quien recoge las piezas las lleva a produccion y realiza su trabajo hasta
+  entregar el producto a calidad
+
+  calidad revisa en el sistema cuantas piezas obtuvo del almacen la linea y los
+  empata con productos terminados.
+
+  el jefe de calidad empata las piezas con los productos terminados
+
+REPORTES PARA GERENTE GENERAL
+
+  ordenes por dia y semana
+  productos por dia, semana y area
+  balances de piezas y productos
+  productos aprobados por calidad y no aprobados por calidad
+  ordenes con status abierto y status cerrado
+  personal por area
+  input y output del almacen por dia y semana
+  asistencias de todo el personal
+  horas extras de todo el personal

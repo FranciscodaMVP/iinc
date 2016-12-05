@@ -6,13 +6,13 @@
 
   <form class="form-horizontal" method = "POST" enctype = "multipart/form-data">
     {% csrf_token %}
-
-    {{form.as_p}}
+    <div class="container">
+      {{form.as_p}}
 
       <br>
-        <button type="submit" class="btn btn-primary"> Guardar </button>
-        <button type="submit" class="btn btn-warning">Limpiar</button>
+        <button type="submit" class="btn btn-primary"> Save </button>
+        <button type="submit" class="btn btn-warning"> Clear </button>
       </br>
-
+    </div>
 </div>
 {% endblock %}

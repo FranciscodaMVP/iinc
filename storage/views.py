@@ -62,6 +62,9 @@ class orders_report(ListView):
         form.instance.ck_employee = self.request.user
         return super(check, self).form_valid(form)
 
+# @login_required
+
+
 '''
 @login_required
 def employeein(request, pk):

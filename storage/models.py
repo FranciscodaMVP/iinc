@@ -71,6 +71,7 @@ class order(models.Model):
 
     def __unicode__(self):
         return "Order: %s, LineChief : %s"%(self.id, self.or_lineCh)
+        
 '''
 class employee(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
