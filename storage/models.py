@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
-import datetime
+from datetime import date
+from django.utils import timezone
 
 # Create your models here.
-class employee(models.Model):
+class Employee(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     name = models.CharField(max_length=50)
 
@@ -20,7 +21,7 @@ class employee(models.Model):
         (Nothing, 'Nothing')
     ]
     category=models.IntegerField(choices=CATEGORIES, default=0)
-    line = models.IntegerField(blank=True, null=True, default=None)
+    line = models.IntegerField(blank=True, default=0)
     is_production = models.BooleanField(default=False, blank=True)
     is_storage = models.BooleanField(default=False, blank=True)
     shift = models.ManyToManyField('shifts', blank=True)
@@ -32,7 +33,7 @@ class employee(models.Model):
             return "%s, %s, Line : %s"%(self.name, self.get_category_display(), self.line)
 
 # shifts
-WEEKDAYS = [
+WEEKDAYS = (
     (1, ("Monday")),
     (2, ("Tuesday")),
     (3, ("Wednesday")),
@@ -40,38 +41,68 @@ WEEKDAYS = [
     (5, ("Friday")),
     (6, ("Saturday")),
     (7, ("Sunday")),
-]
-class shifts(models.Model):
-    weekday = models.IntegerField(choices = WEEKDAYS)
+)
+class Shifts(models.Model):
+    weekday = models.IntegerField(choices = WEEKDAYS, default = 0)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
     def __unicode__(self):
         return "Day : %s, In : %s, Out %s"%(self.get_weekday_display(), self.from_hour, self.to_hour)
 
 
-class checkIn(models.Model):
-    ck_employee=models.ManyToManyField(employee)
-    date = models.DateField(auto_now=True)
-    in_hour = models.TimeField(auto_now=True, blank=True)
-    out_hour = models.TimeField(blank=True)
 
-class order(models.Model):
-    STATUSES = [
+class CheckIn(models.Model):
+    CK_TIPO = (
+        ('i', 'in'),
+        ('o', 'out'),
+    )
+    ck_employee=models.ForeignKey("Employee", default= 1, blank = True)
+    dateTime = models.DateTimeField(default = timezone.now, blank=True)
+    ck_tipo = models.CharField(max_length = 1, choices = CK_TIPO)
+
+    def __unicode__(self):
+        if self.ck_tipo == 'i':
+            return " employee : %s, in -> %s"%(self.ck_employee, self.dateTime)
+        else:
+            return " employee : %s, out -> %s"%(self.ck_employee, self.dateTime)
+
+class Order(models.Model):
+    STATUSES = (
         ('p', 'pending'),
         ('c', 'closed'),
-    ]
-    or_delivery = models.ForeignKey(employee, related_name = 'sender', on_delete = models.CASCADE)
-    or_receive = models.ForeignKey(employee, related_name ='receiver', on_delete = models.CASCADE)
-    or_lineCh = models.ForeignKey(employee, related_name ='LineChief', on_delete = models.CASCADE)
+    )
+    or_delivery = models.ForeignKey(Employee, related_name = 'sender', on_delete = models.CASCADE)
+    or_receive = models.ForeignKey(Employee, related_name ='receiver', on_delete = models.CASCADE)
+    or_lineCh = models.ForeignKey(Employee, related_name ='LineChief', on_delete = models.CASCADE)
     or_date = models.DateField(auto_now=True)
-    or_time = models.TimeField(auto_now=True)
+    or_time = models.DateTimeField(default = timezone.now, blank=True)
     or_status = models.CharField(choices=STATUSES, default='p', max_length=1)
     or_pieces = models.IntegerField(blank=True, default=0)
     or_finished = models.IntegerField(blank=True, default=0)
 
     def __unicode__(self):
         return "Order: %s, LineChief : %s"%(self.id, self.or_lineCh)
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#   COMENTARIOS
+
 '''
 class employee(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)

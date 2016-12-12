@@ -1,13 +1,13 @@
 from django.contrib import admin
-from models import employee, shifts, checkIn, order
+from models import Employee, Shifts, CheckIn, Order
 #from models import line, line_chief, quality_chief, reg_employee, pieces
 #from models import order, piece_quantity, entrance
 # Register your models here.
 
-admin.site.register(employee)
-admin.site.register(shifts)
-admin.site.register(checkIn)
-admin.site.register(order)
+admin.site.register(Employee)
+admin.site.register(Shifts)
+admin.site.register(CheckIn)
+admin.site.register(Order)
 
 '''
 admin.site.register(line)

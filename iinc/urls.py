@@ -2,7 +2,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from storage.views import Index_view, view, login, register, re_order
-from storage.views import orders_report#, check
+from storage.views import orders_report, checks
 from django.contrib.auth.views import login, logout_then_login
 
 urlpatterns = [
@@ -17,6 +17,6 @@ url(r'^$', Index_view.as_view(), name='start'),
 # reports
     url(r'orders$', orders_report.as_view(), name='report_orders'),
 # check in
-    # url(r'check$', check.as_view(), name='check'),
+    url(r'check$', checks, name='check'),
 
 ]

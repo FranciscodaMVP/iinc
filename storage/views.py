@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, FormView, ListView
 from django.views.generic import CreateView, DetailView, UpdateView
-from models import employee, order, checkIn
-from forms import user_form, order_form#, check_In
+from models import Employee, CheckIn
+from models import Order
+from forms import user_form , order_form#, check_In
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -23,7 +24,7 @@ class register(FormView):
 
     def form_valid(self, form):
         user = form.save()
-        x = employee()
+        x = Employee()
         x.user = user
         x.name = form.cleaned_data['name']
         x.is_lineCh = form.cleaned_data['is_lineCh']
@@ -41,7 +42,7 @@ class re_order(FormView):
     success_url = reverse_lazy('report_orders')
 
     def form_valid(self, form):
-        o = order()
+        o = Order()
         o.or_delivery = form.cleaned_data['or_delivery']
         o.or_receive = form.cleaned_data['or_receive']
         o.or_lineCh = form.cleaned_data['or_lineCh']
@@ -52,20 +53,30 @@ class re_order(FormView):
 
 class orders_report(ListView):
     template_name = 'ordersRE.html'
-    model = order
+    model = Order
 
 # class check(FormView):
     # template_name='check.html'
     # form_class=check_In
 
     def form_valid(self, form):
-        form.instance.ck_employee = self.request.user
+        form.instance.ck_Employee = self.request.user
         return super(check, self).form_valid(form)
 
-# @login_required
+@login_required
+def checks (request):
+    context = {}
+    a = CheckIn.objects.filter(Employee = request.user.ck_employee)
+    if a.exist():
+        tipo_I = (a.latest.ck_tipo == 'o')
+    else:
+        tipo_I = True
+    context ['tipo'] = tipo_I
+    context ['show'] = 'i' if (tipo_I) else 'o'
+    return render (request, 'check.html', context)
 
 
 '''
 @login_required
-def employeein(request, pk):
+def Employeein(request, pk):
 '''
