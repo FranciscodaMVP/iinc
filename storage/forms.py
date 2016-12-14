@@ -15,17 +15,18 @@ class user_form(UserCreationForm):
 
 class order_form(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(Order_form, self).__init__(*args, **kwargs)
-        self.fields['or_delivery'].queryset=Employee.objects.filter(is_storage=True)
-        self.fields['or_receive'].queryset=Employee.objects.filter(is_production=True)
-        self.fields['or_lineCh'].queryset=Employee.objects.filter(is_lineCh=True)
+        super(order_form, self).__init__(*args, **kwargs)
+        # self.fields['or_delivery'].queryset=Employee.objects.filter(is_storage=True)
+        # self.fields['or_receive'].queryset=Employee.objects.filter(is_production=True)
+        # self.fields['or_lineCh'].queryset=Employee.objects.filter(is_lineCh=True)
 
     class Meta:
         model = Order
-        fields = ['or_delivery', 'or_receive','or_lineCh', 'or_pieces', 'or_status' ]
-        labels = {'or_delivery': 'Delivered ', 'or_receive': 'Received', 'or_lineCh': 'LineChief',
-        'or_status':'Status' }
+        fields = ['or_delivery', 'or_receive','or_lineCh', 'or_pieces' ]
+        labels = {'or_delivery': 'Delivered ', 'or_receive': 'Received ', 'or_lineCh': 'LineChief ',
+        'or_status':'Status ', 'or_pieces':'Quantity ' }
         widgets = {'or_delivery': forms.Select, 'or_receive': forms.Select, 'or_lineCh': forms.Select}
+
 
 '''
 class check_In(ModelForm):

@@ -103,11 +103,11 @@
                     <div id="navigation">
                         <!-- Navigation Menu-->
                         <ul class="navigation-menu">
-                          {% if request.user.is_authenticated %}
 
                             <li class="has-submenu">
                                 <a href="#"><i class="glyphicon glyphicon-time"></i>Check In</a>
                             </li>
+                            {% if request.user.is_authenticated %}
                             {% endif %}
                             <li class="has-submenu">
                                 <a href="#"><i class="glyphicon glyphicon-book"></i>Reports</a>

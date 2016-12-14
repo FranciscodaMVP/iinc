@@ -4,27 +4,66 @@ from django.db import models
 from datetime import date
 from django.utils import timezone
 
+# CATEGORIES
+CATEGORIES = (
+    ('1', 'Automotive'),
+    ('2', 'Microtechnology'),
+)
+# LINES
+LINES = (
+    ('1', 'Line 1'),
+    ('2', 'Line 2'),
+    ('3', 'Line 3'),
+    ('4', 'Line 4'),
+    ('5', 'Line 5'),
+    ('6', 'Line 6'),
+    ('7', 'Line 7'),
+    ('8', 'Line 8'),
+)
+
+# Departments
+DEPARTMENTS = (
+    ('q', 'quality'),
+    ('p', 'production'),
+    ('s', 'storage'),
+)
+
 # Create your models here.
 class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    user = models.OneToOneField(User, on_delete = models.CASCADE, null=True)
     name = models.CharField(max_length=50)
 
-    is_lineCh = models.BooleanField(default=False, blank=True)
-    is_qtCh = models.BooleanField(default=False, blank=True)
-# CATEGORIES
-    Auto = 1
-    Micro = 2
-    Nothing = 3
-    CATEGORIES = [
-        (Auto, 'Auto'),
-        (Micro, 'Micro'),
-        (Nothing, 'Nothing')
-    ]
-    category=models.IntegerField(choices=CATEGORIES, default=0)
-    line = models.IntegerField(blank=True, default=0)
-    is_production = models.BooleanField(default=False, blank=True)
-    is_storage = models.BooleanField(default=False, blank=True)
-    shift = models.ManyToManyField('shifts', blank=True)
+    department = models.CharField(
+        choices = DEPARTMENTS,
+        blank=True,
+        null=True,
+        max_length=1,
+    )
+
+    category=models.CharField(
+        choices=CATEGORIES,
+        blank=True,
+        null=True,
+        max_length=1,
+    )
+
+    line = models.CharField(
+        choices=LINES,
+        blank=True,
+        default=0,
+        max_length=1,
+    )
+
+    chief_type = models.CharField(
+        choices = (
+        ('GM', 'General Manager'),
+        ('Ch', 'Chief'),
+        ),
+        blank=True,
+        null=True,
+        max_length=2,
+    )
+    # shift = models.ManyToManyField('shifts', blank=True)
 
     def __unicode__(self):
         if (self.line == None):
@@ -71,32 +110,53 @@ class Order(models.Model):
         ('p', 'pending'),
         ('c', 'closed'),
     )
-    or_delivery = models.ForeignKey(Employee, related_name = 'sender', on_delete = models.CASCADE)
-    or_receive = models.ForeignKey(Employee, related_name ='receiver', on_delete = models.CASCADE)
-    or_lineCh = models.ForeignKey(Employee, related_name ='LineChief', on_delete = models.CASCADE)
-    or_date = models.DateField(auto_now=True)
-    or_time = models.DateTimeField(default = timezone.now, blank=True)
-    or_status = models.CharField(choices=STATUSES, default='p', max_length=1)
+    or_delivery = models.ForeignKey(
+        Employee,
+        related_name = 'sender',
+        on_delete = models.CASCADE,
+        limit_choices_to = {
+            'department': 's',
+        }
+    )
+
+    or_receive = models.ForeignKey(
+        Employee,
+        related_name ='receiver',
+         on_delete = models.CASCADE,
+         limit_choices_to = {
+            'department': 'p',
+         }
+    )
+    or_lineCh = models.ForeignKey(
+        Employee,
+        related_name ='LineChief',
+        on_delete = models.CASCADE,
+        limit_choices_to = {
+            'category': 'p',
+            'chief_type': 'Ch'
+        },
+    )
+    # or_date = models.DateField(auto_now=True)
+    or_date_time = models.DateTimeField(default = timezone.now, blank=True)
     or_pieces = models.IntegerField(blank=True, default=0)
-    or_finished = models.IntegerField(blank=True, default=0)
+    or_status = models.BooleanField(default=True, blank=True)
 
     def __unicode__(self):
         return "Order: %s, LineChief : %s"%(self.id, self.or_lineCh)
 
+class Shift(models.Model):
+    sh_date = models.DateField(default=date.today, blank=True)
+    sh_category = models.CharField(max_length=2, choices=CATEGORIES)
+    sh_line = models.CharField(max_length=1, choices=LINES)
+    sh_total = models.IntegerField()
+    sh_finished = models.IntegerField()
+    sh_unfinished = models.IntegerField()
+    sh_qlty_chkd = models.BooleanField(default=False, blank=True)
+    sh_approved = models.IntegerField(blank=True, null=True)
+    sh_not_approved = models.IntegerField(blank=True, null=True)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def __unicode__(self):
+        return "Line -> %s, Date -> %s"%(self.get_sh_line_display(), self.get_sh_category_display)
 
 
 
